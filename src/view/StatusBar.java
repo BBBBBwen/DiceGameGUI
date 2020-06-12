@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 /*Status bar panel at bottom*/
 public class StatusBar extends JPanel {
     private static final long serialVersionUID = 4267381055865535188L;
-    JLabel label;
+    private JLabel label;
 
     public StatusBar() {
         label = new JLabel("Statues Bar");

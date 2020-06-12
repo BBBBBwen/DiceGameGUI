@@ -69,7 +69,6 @@ public class GameEngineCallbackGUI extends JFrame
         playerList.addActionListener(
                 new PlayerListActionListener(this, gameEngine));
 
-        summaryPanel.setPreferredSize(new Dimension(150, 400));
         /* set preferred location and size */
         this.getContentPane().add(playerList, BorderLayout.NORTH);
         this.getContentPane().add(currentView, BorderLayout.CENTER);
@@ -81,6 +80,8 @@ public class GameEngineCallbackGUI extends JFrame
         setSize(800, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        
+        summaryPanel.setPreferredSize(new Dimension(this.getWidth() / 4, this.getHeight()));
     }
 
     @Override

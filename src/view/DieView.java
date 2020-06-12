@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 /*a panel that draw individual die*/
 public class DieView extends JPanel {
     private static final long serialVersionUID = 8542230447425767287L;
-    int point;
+    private int point;
 
     public DieView(int point) {
         this.point = point;
