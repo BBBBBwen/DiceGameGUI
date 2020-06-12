@@ -1,10 +1,9 @@
 package controller.menu;
 
 import java.awt.GridLayout;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -16,30 +15,56 @@ import model.interfaces.Player;
 import view.GameEngineCallbackGUI;
 import view.PlayerGUI;
 
+/**
+ * @author bowen
+ *
+ */
+/* Respond to Add player button under option menu */
 public class AddPlayerActionListener implements ActionListener {
     private GameEngine gameEngine;
-    private JComboBox<String> playerList;
     private GameEngineCallbackGUI frame;
 
     public AddPlayerActionListener(GameEngineCallbackGUI frame,
-            GameEngine gameEngine, JComboBox<String> playerList) {
+            GameEngine gameEngine) {
         this.frame = frame;
         this.gameEngine = gameEngine;
-        this.playerList = playerList;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        /* get id for new player */
         int id = frame.getPlayerId();
-        Player player = setPlayerInformation(String.valueOf(id));
-        gameEngine.addPlayer(player);
-        frame.addPlayerGUI(player.getPlayerId(),
-                new PlayerGUI(gameEngine, player));
-        playerList.addItem("Player " + id);
-        frame.setPlayerId(++id);
+
+        /* get player information from popup window */
+        Player player = setPlayerInformation("Player " + id);
+        if (player != null) {
+
+            /* add player to model */
+            gameEngine.addPlayer(player);
+
+            /* create gui for new player and set name to the panel */
+            PlayerGUI gui = new PlayerGUI(frame, gameEngine, player);
+            gui.setName("Player " + id);
+
+            /* update summary */
+            frame.updateSummary(gui.getPlayerInfo());
+
+            /* add new gui to display area under main frame */
+            frame.getCurrentView().add(gui, "Player " + id);
+
+            /* add new player to player list */
+            frame.getPlayerList().addItem("Player " + id);
+
+            frame.switchPanel(player.getPlayerId());
+
+            /* current id is used, plus one */
+            frame.setPlayerId(++id);
+        }
     }
 
+    /* pop up window */
     public Player setPlayerInformation(String playerId) {
+        /* create new panel and setting for pop up dialog */
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(0, 2, 2, 2));
 
@@ -57,17 +82,19 @@ public class AddPlayerActionListener implements ActionListener {
                 JOptionPane.INFORMATION_MESSAGE);
 
         if (option == JOptionPane.YES_OPTION) {
+            /* create new player based on confirmed information */
             String name = playerName.getText();
             int point = 0;
+            boolean flag = true;
             try {
                 point = Integer.parseInt(playerPoint.getText());
             } catch (NumberFormatException nfe) {
-                nfe.printStackTrace();
+                JOptionPane.showMessageDialog(frame, "please enter integer");
+                flag = false;
             }
-
-            return new SimplePlayer(playerId, name, point);
+            if (!name.isEmpty() && flag)
+                return new SimplePlayer(playerId, name, point);
         }
-
         return null;
     }
 

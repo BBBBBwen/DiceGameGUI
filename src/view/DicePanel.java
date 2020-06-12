@@ -1,14 +1,19 @@
-package view.dicepanel;
+package view;
 
 import java.awt.GridLayout;
-
 import javax.swing.JPanel;
 
 import model.DicePairImpl;
 import model.interfaces.DicePair;
 import model.interfaces.Die;
 
+/**
+ * @author bowen
+ *
+ */
+/*A panel that contains two dice*/
 public class DicePanel extends JPanel {
+    private static final long serialVersionUID = -9120928071195944097L;
     private DicePair dicePair;
     private DieView die1;
     private DieView die2;
@@ -28,11 +33,9 @@ public class DicePanel extends JPanel {
 
     public void setDie1(Die die) {
         die1.setPoint(die.getValue());
-        die1.repaint();
     }
 
     public void setDie2(Die die) {
         die2.setPoint(die.getValue());
-        die2.repaint();
     }
 }

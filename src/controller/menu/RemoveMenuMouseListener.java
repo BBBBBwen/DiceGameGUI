@@ -2,42 +2,51 @@ package controller.menu;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
-import javax.swing.JComboBox;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import model.interfaces.GameEngine;
 import model.interfaces.Player;
+import view.GameEngineCallbackGUI;
 
+/**
+ * @author bowen
+ *
+ */
+/* Respond to Remove Player button under option menu */
 public class RemoveMenuMouseListener implements MouseListener {
+    private GameEngineCallbackGUI frame;
     private GameEngine gameEngine;
-    private JMenu menu;
-    private JComboBox<String> playerList;
+    private JMenu removePlayerMenu;
 
-    public RemoveMenuMouseListener(GameEngine gameEngine,
-            JComboBox<String> playerList, JMenu menu) {
+    public RemoveMenuMouseListener(GameEngineCallbackGUI frame,
+            GameEngine gameEngine, JMenu removePlayerMenu) {
+        this.frame = frame;
         this.gameEngine = gameEngine;
-        this.playerList = playerList;
-        this.menu = menu;
+        this.removePlayerMenu = removePlayerMenu;
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        menu.removeAll();
+        /* clear all player added */
+        removePlayerMenu.removeAll();
+
+        /* get all player added or display no player */
         if (gameEngine.getAllPlayers().size() != 0) {
             for (Player player : gameEngine.getAllPlayers()) {
                 JMenuItem item = new JMenuItem(player.getPlayerName());
-                menu.add(item);
-                item.addActionListener(new RemovePlayerActionListener(
-                        gameEngine, playerList, player));
+                removePlayerMenu.add(item);
+                item.addActionListener(new RemovePlayerActionListener(frame,
+                        gameEngine, player));
             }
         } else {
             JMenuItem item = new JMenuItem("No Player Added");
             item.setEnabled(false);
-            menu.add(item);
+            removePlayerMenu.add(item);
         }
     }
+
+    /* redundant method */
 
     @Override
     public void mouseClicked(MouseEvent e) {

@@ -3,38 +3,57 @@ package view;
 import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JToolBar;
 
 import controller.toolbar.PlaceBetActionListener;
 import controller.toolbar.ResetBetActionListener;
 import controller.toolbar.RollDiceActionListener;
 import model.interfaces.GameEngine;
-import model.interfaces.Player;
 
-public class ToolBar extends JPanel {
+/**
+ * @author bowen
+ *
+ */
+/*ToolBar panel which contains buttons*/
+public class ToolBar extends JToolBar {
+    private static final long serialVersionUID = 8746224707654638218L;
     private GameEngine gameEngine;
-    private Player player;
-    private GameEngineCallbackGUI frame;
+    private PlayerGUI playerGUI;
+    private JPanel panel;
+    private JButton placeBet;
+    private JButton resetBet;
+    private JButton roll;
 
-    public ToolBar(GameEngineCallbackGUI frame, GameEngine gameEngine) {
+    public ToolBar(PlayerGUI playerGUI, GameEngine gameEngine) {
         this.gameEngine = gameEngine;
-        this.frame = frame;
-        this.setLayout(new GridLayout(1, 4, 2, 2));
+        this.playerGUI = playerGUI;
+        panel = new JPanel();
+        panel.setLayout(new GridLayout(1, 3, 2, 2));
         creatToolBar();
     }
 
     private void creatToolBar() {
-        JButton placeBet = new JButton("place bet");
-        JButton resetBet = new JButton("cancel bet");
-        JButton roll = new JButton("roll");
+        placeBet = new JButton("place bet");
+        resetBet = new JButton("cancel bet");
+        roll = new JButton("roll");
 
         placeBet.addActionListener(
-                new PlaceBetActionListener(gameEngine, frame));
+                new PlaceBetActionListener(gameEngine, playerGUI));
         resetBet.addActionListener(
-                new ResetBetActionListener(gameEngine, frame));
-        roll.addActionListener(new RollDiceActionListener(gameEngine, frame));
+                new ResetBetActionListener(gameEngine, playerGUI));
+        roll.addActionListener(
+                new RollDiceActionListener(gameEngine, playerGUI, this));
 
-        this.add(placeBet);
-        this.add(resetBet);
-        this.add(roll);
+        panel.add(placeBet);
+        panel.add(resetBet);
+        panel.add(roll);
+        this.add(panel);
+    }
+
+    /* set all button enable or disables*/
+    public void setEnabled(boolean enable) {
+        placeBet.setEnabled(enable);
+        resetBet.setEnabled(enable);
+        roll.setEnabled(enable);
     }
 }

@@ -2,28 +2,38 @@ package controller.menu;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 
 import model.interfaces.GameEngine;
 import model.interfaces.Player;
+import view.GameEngineCallbackGUI;
 
+/**
+ * @author bowen
+ *
+ */
+/* Respond to each Player button under Remove Player menu */
 public class RemovePlayerActionListener implements ActionListener {
-    private Player player;
+    private GameEngineCallbackGUI frame;
     private GameEngine gameEngine;
-    private JComboBox<String> playerList;
+    private Player player;
 
-    public RemovePlayerActionListener(GameEngine gameEngine,
-            JComboBox<String> playerList, Player player) {
+    public RemovePlayerActionListener(GameEngineCallbackGUI frame,
+            GameEngine gameEngine, Player player) {
+        this.frame = frame;
         this.gameEngine = gameEngine;
-        this.playerList = playerList;
         this.player = player;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        gameEngine.removePlayer(player);
-        playerList.removeItem("Player " + player.getPlayerId());
+        /* remove player from model and player list */
+        if (!frame.isRolling()) {
+            gameEngine.removePlayer(player);
+            frame.getPlayerList().removeItem(player.getPlayerId());
+        } else {
+            JOptionPane.showMessageDialog(frame, "player is rolling");
+        }
     }
 
 }
